@@ -1,0 +1,18 @@
+{
+  "walmart": [
+    {
+      "sku": "123456789",
+      "name": "Pokemon TCG: Scarlet & Violet Elite Trainer Box",
+      "url": "https://www.walmart.com/ip/123456789",
+      "price_limit": 60.00
+    }
+  ],
+  "bestbuy": [
+    {
+      "sku": "6543210",
+      "name": "Pokemon TCG: Premium Collection",
+      "url": "https://www.bestbuy.com/site/6543210.p",
+      "price_limit": 80.00
+    }
+  ]
+}
