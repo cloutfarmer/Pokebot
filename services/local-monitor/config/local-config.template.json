@@ -1,0 +1,30 @@
+{
+  "zip_codes": ["12345"],
+  "radius_miles": 50,
+  "check_interval_minutes": 15,
+  "retailers": {
+    "bestbuy": {
+      "enabled": true,
+      "categories": ["pokemon collectibles", "trading cards"],
+      "search_terms": ["pokemon", "trading card game", "tcg"]
+    },
+    "target": {
+      "enabled": true,
+      "search_terms": ["pokemon", "trading cards", "tcg", "elite trainer box"]
+    },
+    "walgreens": {
+      "enabled": true,
+      "search_terms": ["pokemon", "trading cards"]
+    },
+    "gamestop": {
+      "enabled": false,
+      "search_terms": ["pokemon", "tcg"]
+    }
+  },
+  "notifications": {
+    "console": true,
+    "email": false,
+    "webhook": false
+  },
+  "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+}
