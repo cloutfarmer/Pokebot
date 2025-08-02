@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "skus": [],
+  "limits": {
+    "max_quantity": 2,
+    "max_price": 100.0,
+    "cooldown_seconds": 30
+  }
+}

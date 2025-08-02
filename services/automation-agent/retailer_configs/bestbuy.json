@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "skus": [
+    {
+      "sku": "6418599",
+      "name": "Pokemon Scarlet & Violet Elite Trainer Box",
+      "max_price": 49.99,
+      "quantity": 1,
+      "priority": "high"
+    }
+  ],
+  "limits": {
+    "max_quantity": 2,
+    "max_price": 100.0,
+    "cooldown_seconds": 30
+  }
+}

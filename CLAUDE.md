@@ -2,6 +2,18 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+🗺 Plan & Review
+
+### Before starting work
+- Write a plan to `.claude/tasks/TASK_NAME.md`.
+- The plan should be a detailed implementation plan and the reasoning behind them, as well as tasks broken down.
+- Don’t over plan it, always think MVP.
+- Once you write the plan, firstly ask me to review it. Do not continue until I approve the plan.
+
+### While implementing
+- You should update the plan as you work.
+- After you complete tasks in the plan, you should update and append detailed descriptions of the changes you made, so following tasks can be easily hand over to other engineers.
+
 ## Project Overview
 
 This is a multi-service Pokémon card monitoring and purchasing bot system built with TypeScript and Node.js. The project uses a monorepo architecture with npm workspaces to manage multiple services:

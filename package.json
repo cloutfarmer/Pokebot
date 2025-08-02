@@ -1,33 +1,28 @@
 {
-  "name": "pokebot",
-  "version": "1.0.0",
-  "description": "Multi-site Pokémon card bot with scout monitoring and purchasing agents",
+  "name": "pokemon-card-automation",
+  "version": "2.0.0",
+  "description": "🤖 AI-Powered Pokemon Card Monitoring & Automation System",
   "private": true,
-  "workspaces": [
-    "services/*"
-  ],
   "scripts": {
-    "dev": "docker-compose -f docker-compose.dev.yml up",
-    "build": "npm run build --workspaces",
-    "test": "npm run test --workspaces",
-    "lint": "eslint . --ext .ts,.js",
-    "lint:fix": "eslint . --ext .ts,.js --fix",
-    "format": "prettier --write .",
-    "clean": "npm run clean --workspaces",
-    "setup": "npm install && docker-compose -f docker-compose.dev.yml up -d redis postgres"
+    "start": "cd services/automation-agent && python -m src.main",
+    "setup": "cd services/automation-agent && python setup.py",
+    "test": "cd services/automation-agent && python -m pytest",
+    "install": "cd services/automation-agent && pip install -r requirements.txt && python -m playwright install chromium"
   },
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "eslint": "^8.0.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0",
-    "prettier": "^3.0.0",
-    "typescript": "^5.0.0"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/pokemon-card-automation"
   },
+  "keywords": [
+    "pokemon",
+    "cards",
+    "automation",
+    "agentql",
+    "monitoring",
+    "bestbuy",
+    "playwright"
+  ],
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "python": ">=3.10.0"
   }
 }

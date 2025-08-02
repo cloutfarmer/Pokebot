@@ -1,0 +1,14 @@
+{
+  "email": "your_email@example.com",
+  "password": "your_password",
+  "payment_method": "ending_in_1234",
+  "billing_address": {
+    "first_name": "John",
+    "last_name": "Doe",
+    "address1": "123 Main St",
+    "city": "Anytown",
+    "state": "NY",
+    "zip": "12345",
+    "phone": "555-123-4567"
+  }
+}
