@@ -16,87 +16,193 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a multi-service Pokémon card monitoring and purchasing bot system built with TypeScript and Node.js. The project uses a monorepo architecture with npm workspaces to manage multiple services:
+This is a Python-based Pokemon card monitoring and purchasing automation system built with Playwright, AgentQL, and multi-threading. The system uses advanced AI-powered element detection and parallel processing:
 
-- **Scout Service**: Monitors SKUs from `skus.json` and detects stock changes via web scraping
-- **Local Monitor Service**: Monitors local stores for Pokemon products by ZIP code 
-- **Agents Service**: Future purchasing automation (not yet implemented)
-- **Account Manager**: Future account/proxy management (not yet implemented)
+- **Multi-Threaded Monitoring**: Monitors up to 6 Best Buy Pokemon products simultaneously
+- **Airtable Integration**: Persistent stock tracking with historical data and analytics
+- **AgentQL Intelligence**: AI-powered element detection that adapts to website changes
+- **Best Buy Automation**: Complete monitoring and cart automation with stealth features
+- **Google OAuth**: Automated sign-in with 2FA and backup code support
 
 ## Development Commands
 
-### Root Level Commands
-- `npm run dev` - Start development environment with Docker Compose
-- `npm run build` - Build all workspace services  
-- `npm run test` - Run tests across all workspaces
-- `npm run lint` - Run ESLint on TypeScript files
-- `npm run lint:fix` - Fix ESLint issues automatically
-- `npm run format` - Format code with Prettier
-- `npm run setup` - Install dependencies and start Redis/PostgreSQL containers
+### Main System Commands
+Navigate to `services/automation-agent/` and run:
+- `python setup.py` - Run automated setup script (dependencies, browsers, configuration)
+- `python -m src.main` - Start single-product monitoring
+- `python src/multi_thread_monitor.py` - Start multi-threaded monitoring (recommended)
+- `python src/multi_tab_monitor.py` - Alternative: single browser with multiple tabs
 
-### Service-Specific Commands
-Navigate to individual service directories (`services/scout/`, `services/local-monitor/`) and run:
-- `npm run dev` - Run service in development mode with ts-node
-- `npm run build` - Compile TypeScript to JavaScript  
-- `npm run start` - Run compiled JavaScript
-- `npm test` - Run Jest tests for that service
+### Development & Testing Commands
+- `pip install -r requirements.txt` - Install Python dependencies
+- `playwright install` - Install browser dependencies  
+- `python -m src.browsers.agentql_browser` - Test AgentQL browser functionality
+- `python -m src.agents.bestbuy_agent` - Test Best Buy agent directly
 
-### Local Monitor Dashboard (File-Based)
-The local-monitor service includes a simple file-based interface:
-- `npm run status` - Show current monitoring status and recent findings
-- `npm run watch` - Live-updating status display (refreshes every 5 seconds)
-- `npm run logs` - Follow live logs
-- `cat data/summary.txt` - View full text summary
-- `cat data/status.json` - View JSON status data
-- `cat data/stores.json` - View discovered stores data
-- `cat data/products-found.json` - View recent Pokemon product findings
+### Configuration Commands
+- `cp .env.template .env` - Create environment configuration
+- `nano .env` - Edit API keys and credentials
+- `nano retailer_configs/bestbuy.json` - Configure products to monitor
+- `nano auth_configs/bestbuy.json` - Configure account authentication
 
 ## Architecture
 
-### Monorepo Structure
+### Current Project Structure
 ```
-services/
-├── scout/           # Stock monitoring via SKU file watching
-├── local-monitor/   # Local store inventory checking  
-├── agents/          # Future: purchasing automation
-├── account-manager/ # Future: account/proxy management
-└── shared/          # Future: shared utilities
+services/automation-agent/
+├── 🏠 src/
+│   ├── main.py                     # Single-product monitoring entry point
+│   ├── multi_thread_monitor.py     # Multi-threaded monitoring (6 products)
+│   ├── multi_tab_monitor.py        # Alternative: single browser approach
+│   ├── automation_service.py       # Main orchestrator
+│   │
+│   ├── 📊 integrations/
+│   │   └── airtable_tracker.py     # Stock tracking and analytics
+│   │
+│   ├── 🧠 browsers/
+│   │   └── agentql_browser.py      # AgentQL-powered browser automation
+│   │
+│   ├── 🏪 agents/
+│   │   └── bestbuy_agent.py        # Best Buy-specific automation
+│   │
+│   ├── 🔐 auth/
+│   │   └── google_auth.py          # Google OAuth automation
+│   │
+│   ├── ⚙️ config/
+│   │   └── config_manager.py       # Configuration management
+│   │
+│   └── 🛠️ utils/
+│       └── logger_config.py        # Logging utilities
+│
+├── 🏪 retailer_configs/            # Product monitoring configurations
+├── 🔐 auth_configs/                # Account authentication settings
+├── 📸 browser-profiles/            # Browser data and screenshots
+└── 📝 logs/                        # Application logs
 ```
 
-### Scout Service Architecture
-- Watches `skus.json` for changes using chokidar
-- Polls retailer websites every 30 seconds (with jitter) for stock status
-- Currently supports Walmart and Best Buy via HTML scraping
-- Uses axios for HTTP requests with browser-like User-Agent headers
-- Implements basic out-of-stock detection by searching for keywords in HTML
+### Planned Scalable Architecture (Phase 4)
+```
+services/automation-agent/
+├── 🏠 src/
+│   ├── 🎯 core/                    # Core infrastructure
+│   │   ├── browser_pool.py         # Browser pool manager (20-30 instances)
+│   │   ├── proxy_manager.py        # Proxy rotation system
+│   │   ├── detection_engine.py     # Multi-method detection
+│   │   ├── alert_service.py        # WebSocket alert server
+│   │   └── orchestrator.py         # Multi-retailer orchestration
+│   │
+│   ├── 🏪 agents/                  # Retailer-specific agents
+│   │   ├── base_agent.py           # Abstract base class
+│   │   ├── bestbuy_agent.py        # Best Buy (implemented)
+│   │   ├── target_agent.py         # Target (Shape Security)
+│   │   ├── walmart_agent.py        # Walmart (PerimeterX)
+│   │   ├── pokemoncenter_agent.py  # Pokemon Center (Triple protection)
+│   │   └── costco_agent.py         # Costco (Membership required)
+│   │
+│   ├── 🛡️ stealth/                 # Anti-detection systems
+│   │   ├── fingerprint_manager.py  # Browser fingerprinting
+│   │   ├── behavior_simulator.py   # Human behavior simulation
+│   │   ├── shape_bypass.py         # Shape Security bypass
+│   │   └── perimeterx_bypass.py   # PerimeterX bypass
+│   │
+│   └── 📱 notifications/           # Alert channels
+│       ├── websocket_server.py     # Real-time dashboard
+│       ├── discord_alerts.py       # Discord webhooks
+│       ├── sms_alerts.py          # Twilio SMS
+│       └── push_alerts.py         # Firebase push
+│
+├── ⚙️ config/                      # Enhanced configuration
+│   ├── proxy_config.json          # Proxy provider settings
+│   ├── monitoring_config.json     # Pool and timing settings
+│   └── stealth_profiles.json      # Detection avoidance profiles
+│
+└── 📊 .claude/tasks/              # Development task tracking
+    ├── browser-pool-implementation.md
+    ├── proxy-integration.md
+    ├── multi-retailer-scaling.md
+    ├── alert-infrastructure.md
+    └── detection-avoidance.md
+```
 
-### Local Monitor Service  
-- Monitors local stores by ZIP code within specified radius
-- Uses StoreLocator to find nearby stores
-- Currently implements Best Buy local inventory checking
-- Configurable via `services/local-monitor/config/local-config.json`
-- Includes notification system for stock alerts
+### Multi-Threading Architecture
+- **Thread Pool**: Each SKU monitored in independent browser instance
+- **Parallel Processing**: 6 products monitored simultaneously
+- **Resource Management**: Configurable thread limits and staggered startup
+- **Error Isolation**: Failure in one thread doesn't affect others
+- **Load Balancing**: Randomized delays prevent overwhelming servers
+
+### AgentQL Integration  
+- **AI Element Detection**: Natural language queries ("find add to cart button")
+- **Adaptive Automation**: Works even when websites change layouts
+- **Fallback Selectors**: Combines AI with traditional CSS selectors
+- **Smart Retry Logic**: Automatically handles page loading and timing issues
 
 ### Configuration Files
-- `skus.json` - Contains retailer SKUs to monitor with price limits
-- `services/local-monitor/config/local-config.json` - Local monitoring configuration
-- TypeScript config uses strict mode with comprehensive error checking
+- `skus.json` - Contains 6 Best Buy Pokemon products with URLs and price limits
+- `retailer_configs/bestbuy.json` - Product priorities, quantities, and purchase limits
+- `auth_configs/bestbuy.json` - Account credentials and authentication settings
+- `.env` - API keys (AgentQL, Airtable), monitoring settings, proxy configuration
+
+### Proxy Configuration (Phase 4)
+The system will support multiple proxy providers:
+- **Residential Proxies**: PacketStream ($1/GB), Bright Data ($15/GB), IPRoyal ($7/GB)
+- **Mobile Proxies**: Soax (3G/4G/5G), ProxyEmpire (US mobile IPs)
+- **Distribution**: 10 direct, 10 residential, 5 mobile, 5 premium proxies across 30 browsers
 
 ### Key Dependencies
-- **chokidar**: File watching for SKU updates
-- **axios**: HTTP client for web scraping
-- **dotenv**: Environment variable management
-- **ts-node**: Development-time TypeScript execution
+- **AgentQL**: AI-powered web automation and element detection
+- **Playwright**: Cross-browser automation with stealth capabilities
+- **Airtable**: Stock tracking database with historical analytics
+- **Loguru**: Advanced logging with rotation and filtering
+- **Asyncio**: Asynchronous programming for concurrent operations
+
+### Planned Dependencies (Phase 4)
+- **aiohttp**: Async HTTP client for API calls
+- **websockets**: WebSocket server for real-time alerts
+- **redis**: High-performance caching and queuing
+- **fake-useragent**: Dynamic user agent generation
+- **pyppeteer-stealth**: Additional stealth plugins
 
 ## Testing Strategy
 
-The project uses Jest for testing. Test files follow the pattern `*.test.ts` or `*.spec.ts` and are excluded from TypeScript compilation.
+The project uses manual testing and live monitoring validation. Key testing approaches:
+- **AgentQL Browser Testing**: `python -m src.browsers.agentql_browser`
+- **Best Buy Agent Testing**: `python -m src.agents.bestbuy_agent`
+- **Multi-Threading Testing**: `python src/multi_thread_monitor.py` with short durations
+- **Airtable Integration Testing**: Configure test Airtable base and monitor logging
 
 ## Development Notes
 
-- The project is currently in "Phase 0" - basic stock monitoring only
-- Web scraping uses simple HTML text analysis for stock detection
-- No proxy rotation or anti-detection measures implemented yet
-- Future phases will add purchasing automation, CAPTCHA solving, and additional retailers
-- All services use TypeScript with strict mode enabled
-- The system is designed to be modular for easy extension to new retailers
+- **Current Status**: Phase 3 Complete - Multi-threading and analytics ready
+- **AI-Powered**: Uses AgentQL for adaptive element detection and automation
+- **Anti-Detection**: Comprehensive stealth features with human behavior simulation
+- **Production Ready**: Robust error handling, logging, and configuration management
+- **Scalable Architecture**: Thread pool design supports easy expansion to more products
+- **Data Tracking**: Complete stock history and analytics via Airtable integration
+- **Future Enhancement**: Ready for proxy integration and multi-retailer expansion
+
+## Phase 4 Planning: Scale & Multi-Retailer Support
+
+### Browser Pool Architecture
+- **Pool Size**: 20-30 persistent browser instances
+- **Load Distribution**: Round-robin assignment with health scoring
+- **Session Warming**: Periodic activity to maintain "human" presence
+- **Fingerprint Diversity**: Unique canvas, WebGL, audio fingerprints per browser
+
+### Multi-Retailer Support
+- **Target**: Shape Security bypass implementation
+- **Walmart**: PerimeterX handling with sensor data generation
+- **Pokemon Center**: Triple-layer protection (DataDome + Incapsula + hCaptcha)
+- **Costco**: Membership verification and basic protection
+
+### Alert Infrastructure
+- **WebSocket Server**: Real-time dashboard and notifications
+- **Multi-Channel**: Discord, SMS (Twilio), Push (Firebase), Email
+- **Priority Queue**: High-priority SKUs get instant alerts
+- **Latency Target**: < 1 second from detection to notification
+
+### Detection Avoidance
+- **Behavioral Simulation**: Mouse movements, typing patterns, scroll behavior
+- **Navigation Patterns**: Natural browsing with search engine entry points
+- **Request Throttling**: Adaptive delays based on detection risk
+- **Stealth Profiles**: Maximum, Balanced, and Performance modes
